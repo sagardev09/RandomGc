@@ -1,16 +1,47 @@
 "use client"
 import React, { useState } from 'react'
+import { account } from '@/app/config/AppwriteConfig'
+import { ID } from 'appwrite'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 const Signup = () => {
+
+    const router = useRouter()
     const [authState, setauthState] = useState({
         name: "",
         email: "",
         password: ""
     })
+    const [loading, setloading] = useState(false)
+
+    const signup = async () => {
+        setloading(true)
+        try {
+            const response = await account.create(ID.unique(), authState.email, authState.password, authState.name)
+            toast.success("Account created successfully", { theme: 'colored' })
+            console.log(response);
+            router.push("/login")
+        }
+        catch (error) {
+            toast.error("Something happened please try again", { theme: 'colored' })
+            setloading(false)
+        }
+
+        setloading(false)
+    }
+
     const [confpassowrd, setconfpassowrd] = useState("")
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
+        if (authState.password !== confpassowrd || !authState.password || !authState.name || !authState.email || authState.password.length < 8) {
+            alert("all fields are manodatory")
+            return
+        } else {
+            await signup()
+        }
     }
     return (
         <div>
@@ -169,14 +200,15 @@ const Signup = () => {
 
                                 <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                                     <button
+                                        type='submit'
                                         className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
                                     >
-                                        Create an account
+                                        {loading ? "Creating" : "Create an account"}
                                     </button>
 
                                     <p className="mt-4 text-sm text-gray-500 sm:mt-0">
                                         Already have an account?
-                                        <a href="/login" className="text-gray-700 underline">Log in</a>.
+                                        <Link href="/login" className="text-gray-700 underline">Log in</Link>.
                                     </p>
                                 </div>
                             </form>

@@ -1,16 +1,48 @@
 "use client"
 import React, { useState } from 'react'
+import { account } from '@/app/config/AppwriteConfig'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
+import { userStore } from "@/app/State/UserStore"
 
 const Login = () => {
+
+    const userState = userStore()
+
     const [showpassword, setshowpassword] = useState(false)
+    const router = useRouter()
+    const [loading, setloading] = useState(false)
 
     const [authState, setauthState] = useState({
         email: "",
         password: ""
     })
 
-    const handleSubmit = (e) => {
+    const login = async () => {
+        setloading(true)
+        try {
+            const response = await account.createEmailSession(authState.email, authState.password)
+            console.log(response);
+            toast.success("Successfully logged in", { theme: 'colored' })
+            userState.updateUserSession(response)
+            router.push("/chat")
+        } catch (error) {
+            toast.error("Something happened please try again", { theme: 'colored' })
+            setloading(false)
+        }
+        setloading(false)
+    }
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
+        if (!authState.password || !authState.email) {
+            alert("please fill input fields")
+            return
+        } else {
+            await login()
+        }
+
     }
     return (
         <div>
@@ -104,7 +136,7 @@ const Login = () => {
                                 type="submit"
                                 className="inline-block rounded-lg bg-blue-500 px-5 py-3 text-sm font-medium text-white"
                             >
-                                Log in
+                                {loading ? "loging in...." : "Log in"}
                             </button>
                         </div>
                     </form>
