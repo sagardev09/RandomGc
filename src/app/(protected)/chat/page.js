@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { userStore } from '@/app/State/UserStore'
+import ProtectedNav from '@/app/components/ProtectedNav'
 
 const Chat = () => {
 
@@ -29,7 +30,10 @@ const Chat = () => {
         }
     }, [])
     return (
-        <div>Chat</div>
+        <div className='px-8 py-2'>
+            <ProtectedNav />
+            Chat
+        </div>
     )
 }
 
