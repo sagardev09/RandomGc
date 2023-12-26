@@ -5,7 +5,7 @@ import ProtectedNav from '@/app/components/ProtectedNav'
 import Loader from '@/app/components/Spinner'
 import { client, databases } from '@/app/config/AppwriteConfig'
 import { Input } from '@nextui-org/react'
-import { ID } from 'appwrite'
+import { ID, Query } from 'appwrite'
 import { SendHorizonal, Trash } from 'lucide-react'
 import React, { useState, useEffect, useRef } from 'react'
 import { toast } from 'react-toastify'
@@ -20,8 +20,9 @@ const Groupchat = ({ params }) => {
 
 
     useEffect(() => {
+        console.log("grpid", params.id);
         if (!isfetched.current) {
-            fetchmessages()
+            fetchmessages(params.id)
 
             client.subscribe(`databases.${process.env.NEXT_PUBLIC_DATABASE_ID}.collections.${process.env.NEXT_PUBLIC_CHAT_COLLECTION_ID}.documents`,
                 (res) => {
@@ -67,10 +68,16 @@ const Groupchat = ({ params }) => {
         }
     }
 
-    const fetchmessages = async () => {
+    const fetchmessages = async (id) => {
         setloading(true)
         try {
-            const res = await databases.listDocuments(process.env.NEXT_PUBLIC_DATABASE_ID, process.env.NEXT_PUBLIC_CHAT_COLLECTION_ID)
+            const res = await databases.listDocuments(
+                process.env.NEXT_PUBLIC_DATABASE_ID,
+                process.env.NEXT_PUBLIC_CHAT_COLLECTION_ID,
+                [
+                    Query.equal("groups_id", id)
+                ]
+            )
             console.log(res.documents);
             chatstate.addChats(res.documents)
             setloading(false)
