@@ -14,7 +14,7 @@ const ProtectedNav = () => {
         <div>
             <header className="bg-white">
                 <div className="mx-auto justify-between w-full flex h-16 max-w-screen items-center gap-8 px-4 sm:px-6 lg:px-0">
-                    <a className="block text-teal-600" href="/">
+                    <a className="block text-teal-600" href="/chat">
                         <span className="sr-only">Home</span>
                         <svg className="h-8" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
