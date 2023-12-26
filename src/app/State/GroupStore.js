@@ -9,10 +9,13 @@ export const GroupStore = create()(
             set((state) => ({
                 groups: [data, ...state.groups],
             })),
-
         addGroups: (data) =>
             set(() => ({
                 groups: data,
+            })),
+        deleteGroup: (id) =>
+            set((state) => ({
+                chats: state.groups.filter((item) => item.$id !== id),
             })),
     }))
 );

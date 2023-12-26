@@ -20,7 +20,6 @@ const Groupchat = ({ params }) => {
 
 
     useEffect(() => {
-        console.log("grpid", params.id);
         if (!isfetched.current) {
             fetchmessages(params.id)
 
@@ -78,7 +77,6 @@ const Groupchat = ({ params }) => {
                     Query.equal("groups_id", id)
                 ]
             )
-            console.log(res.documents);
             chatstate.addChats(res.documents)
             setloading(false)
         } catch (error) {
@@ -122,7 +120,8 @@ const Groupchat = ({ params }) => {
                                                         <h1>{item["message"]}</h1>
                                                     </div>
                                                 </div>
-                                                <div className='opacity-0 group-hover:opacity-100 bg-red-400 rounded-full p-2 cursor-pointer' onClick={() => handledeletemessage(item.$id)}>
+                                                <div className='opacity-0 group-hover:opacity-100 bg-red-400 rounded-full p-2 cursor-pointer'
+                                                    onClick={() => handledeletemessage(item.$id)}>
                                                     <Trash className='text-white h-[16px]' />
                                                 </div>
                                             </div>
