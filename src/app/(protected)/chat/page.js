@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { userStore } from '@/app/State/UserStore'
 import ProtectedNav from '@/app/components/ProtectedNav'
+import CreateGroup from '@/app/components/CreateGroup'
+import Grouplist from '@/app/components/Grouplist'
 
 const Chat = () => {
 
@@ -30,9 +32,14 @@ const Chat = () => {
         }
     }, [])
     return (
-        <div className='px-8 py-2'>
+        <div className='px-8 py-2 h-screen w-screen'>
             <ProtectedNav />
-            Chat
+            <div className='flex justify-end py-3'>
+                <CreateGroup />
+            </div>
+            <div>
+                <Grouplist />
+            </div>
         </div>
     )
 }

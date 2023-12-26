@@ -1,3 +1,4 @@
+"use client"
 import Link from 'next/link'
 import React from 'react'
 import { userStore } from '../State/UserStore'
@@ -26,7 +27,7 @@ const ProtectedNav = () => {
                     <div className="flex w-full items-center justify-end ">
                         <div className="flex items-center gap-4">
                             <div>
-                                <h5 className='capitalize font-semibold text-lg'>welcome,{user?.name}</h5>
+                                {/* {user && <h5 className='capitalize font-semibold text-lg'>welcome,{user?.name}</h5>} */}
                             </div>
                             <div className="sm:flex sm:gap-4">
                                 <UserModal />
