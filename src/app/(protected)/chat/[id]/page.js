@@ -135,20 +135,22 @@ const Groupchat = ({ params }) => {
                             Array.isArray(chatstate.chats) && chatstate.chats.length > 0 ?
                                 chatstate.chats.map((item, index) => (
                                     item["userid"] === user.$id ?
-                                        (<div className="chat chat-end" key={item.$id}>
-                                            <div className="chat-image avatar">
-                                                <div className="w-10 rounded-full">
-                                                    <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                        (
+                                            <div className="chat chat-end" key={item.$id}>
+                                                <div className="chat-image avatar">
+                                                    <div className="w-10 rounded-full">
+                                                        <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                                    </div>
+                                                </div>
+                                                <div className="chat-header flex  items-center">
+                                                    <h5 className='capitalize'><span className='text-xs'>Send by</span>  {item["name"]}</h5>
+                                                </div>
+                                                <div className="chat-bubble max-w-xl chat-bubble-error text-white">{item["message"]}</div>
+                                                <div className="chat-footer opacity-50">
+                                                    <time className="text-xs opacity-50">Send at  {new Date(item["$createdAt"]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
                                                 </div>
                                             </div>
-                                            <div className="chat-header flex  items-center">
-                                                <h5 className='capitalize'><span className='text-xs'>Send by</span>  {item["name"]}</h5>
-                                            </div>
-                                            <div className="chat-bubble chat-bubble-error text-white">{item["message"]}</div>
-                                            <div className="chat-footer opacity-50">
-                                                <time className="text-xs opacity-50">Send at  {new Date(item["$createdAt"]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
-                                            </div>
-                                        </div>)
+                                        )
                                         :
                                         <div className="chat chat-start" key={item.$id}>
                                             <div className="chat-image avatar">
