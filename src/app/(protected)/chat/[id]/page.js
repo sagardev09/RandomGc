@@ -19,6 +19,9 @@ const Groupchat = ({ params }) => {
     const [loading, setloading] = useState(false)
 
 
+    console.log("timing", chatstate.chats);
+
+
     useEffect(() => {
         if (!isfetched.current) {
             fetchmessages(params.id)
@@ -112,27 +115,35 @@ const Groupchat = ({ params }) => {
                             Array.isArray(chatstate.chats) && chatstate.chats.length > 0 ?
                                 chatstate.chats.map((item, index) => (
                                     item["userid"] === user.$id ?
-                                        <div className='flex  justify-end mb-2' key={item.$id}>
-                                            <div className='group flex items-center space-x-4'>
-                                                <div className='bg-blue-500 text-white rounded-3xl px-4 py-2 max-w-md flex items-center space-x-3'>
-                                                    <div>
-                                                        <h1>{item["name"]}</h1>
-                                                        <h1>{item["message"]}</h1>
-                                                    </div>
-                                                </div>
-                                                <div className='opacity-0 group-hover:opacity-100 bg-red-400 rounded-full p-2 cursor-pointer'
-                                                    onClick={() => handledeletemessage(item.$id)}>
-                                                    <Trash className='text-white h-[16px]' />
+                                        (<div className="chat chat-end" key={item.$id}>
+                                            <div className="chat-image avatar">
+                                                <div className="w-10 rounded-full">
+                                                    <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                                                 </div>
                                             </div>
+                                            <div className="chat-header flex  items-center gap-3">
+                                                <h5>{item["name"]}</h5>
+                                                <time className="text-xs opacity-50">{new Date(item["$createdAt"]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
 
-
-                                        </div> :
-                                        <div className='flex justify-start mb-2' key={item.$id}>
-                                            <div className='bg-gray-500 text-white rounded-3xl px-4 py-2 max-w-md'>
-                                                <h1>{item["name"]}</h1>
-                                                <h1>{item["message"]}</h1>
                                             </div>
+                                            <div className="chat-bubble chat-bubble-error text-white">{item["message"]}</div>
+                                            <div className="chat-footer opacity-50">
+                                                Seen at 12:46
+                                            </div>
+                                        </div>)
+                                        :
+                                        <div className="chat chat-start" key={item.$id}>
+                                            <div className="chat-image avatar">
+                                                <div className="w-10 rounded-full">
+                                                    <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+                                                </div>
+                                            </div>
+                                            <div className="chat-header flex items-center gap-3">
+                                                <h5>{item["name"]}</h5>
+
+                                                <time className="text-xs opacity-50">{new Date(item["$createdAt"]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
+                                            </div>
+                                            <div className="chat-bubble ">{item["message"]}</div>
                                         </div>
                                 )) : <div>
                                     <h5>Write the first one to send message...</h5>
@@ -153,7 +164,7 @@ const Groupchat = ({ params }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 
