@@ -19,10 +19,13 @@ const Groupchat = ({ params }) => {
     const [loading, setloading] = useState(false)
 
 
-    console.log("timing", chatstate.chats);
-
+    const chatContainerRef = useRef(null);
+    const chatsRef = useRef(chatstate.chats);
 
     useEffect(() => {
+
+        const chatContainer = chatContainerRef.current;
+
         if (!isfetched.current) {
             fetchmessages(params.id)
 
@@ -35,6 +38,7 @@ const Groupchat = ({ params }) => {
 
                         if (user.$id !== payload.userid) {
                             chatstate.addChat(payload)
+                            scrollToBottom();
                         }
                     } else if (res.events.includes(
                         "databases.*.collections.*.documents.*.delete")) {
@@ -47,7 +51,23 @@ const Groupchat = ({ params }) => {
 
             isfetched.current = true
         }
-    }, [])
+    }, [chatstate.chats])
+
+    useEffect(() => {
+        // Check if the chatState.chats array has changed
+        if (chatsRef.current !== chatstate.chats) {
+            scrollToBottom();
+            // Update the ref to the latest state
+            chatsRef.current = chatstate.chats;
+        }
+    }, [chatstate.chats]);
+
+    const scrollToBottom = () => {
+        const chatContainer = chatContainerRef.current;
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    };
 
 
     const handleSubmit = async (e) => {
@@ -100,11 +120,11 @@ const Groupchat = ({ params }) => {
     }
 
     return (
-        <div className='px-4'>
-            <div className='top-0 left-0 right-0 bg-white fixed px-4 py-2'>
+        <div className='px-4 overflow-hidden h-screen w-screen' >
+            <div className='top-0 left-0 right-0 bg-white fixed px-4 py-2 z-[1000]'>
                 <ProtectedNav />
             </div>
-            <div className='h-screen w-full mt-20'>
+            <div className='h-[90%] w-full mt-20 overflow-y-auto' id='chat-container' ref={chatContainerRef} >
                 <div className='flex flex-col'>
                     <div className='text-center'>
                         {loading && <Loader />}
@@ -121,14 +141,12 @@ const Groupchat = ({ params }) => {
                                                     <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                                                 </div>
                                             </div>
-                                            <div className="chat-header flex  items-center gap-3">
-                                                <h5>{item["name"]}</h5>
-                                                <time className="text-xs opacity-50">{new Date(item["$createdAt"]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
-
+                                            <div className="chat-header flex  items-center">
+                                                <h5 className='capitalize'><span className='text-xs'>Send by</span>  {item["name"]}</h5>
                                             </div>
                                             <div className="chat-bubble chat-bubble-error text-white">{item["message"]}</div>
                                             <div className="chat-footer opacity-50">
-                                                Seen at 12:46
+                                                <time className="text-xs opacity-50">Send at  {new Date(item["$createdAt"]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
                                             </div>
                                         </div>)
                                         :
@@ -138,12 +156,13 @@ const Groupchat = ({ params }) => {
                                                     <img alt="Tailwind CSS chat bubble component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                                                 </div>
                                             </div>
-                                            <div className="chat-header flex items-center gap-3">
-                                                <h5>{item["name"]}</h5>
-
-                                                <time className="text-xs opacity-50">{new Date(item["$createdAt"]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
+                                            <div className="chat-header flex  items-center">
+                                                <h5 className='capitalize'><span className='text-xs'>Send by</span>  {item["name"]}</h5>
                                             </div>
                                             <div className="chat-bubble ">{item["message"]}</div>
+                                            <div className="chat-footer opacity-50">
+                                                <time className="text-xs opacity-50">Send at  {new Date(item["$createdAt"]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
+                                            </div>
                                         </div>
                                 )) : <div>
                                     <h5>Write the first one to send message...</h5>
